@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastro - POO II</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 { text-align: center; color: #1a1a2e; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        input:focus, select:focus { outline: none; border-color: #4a90d9; }
+        input.invalido { border-color: #e74c3c; background: #fdf2f2; }
+        input.valido { border-color: #27ae60; background: #f0fff4; }
+        .erro { color: #e74c3c; font-size: 0.8rem; margin-top: 4px; }
+        fieldset { border: 2px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        legend { font-weight: 600; padding: 0 10px; }
+        .form-row { display: flex; gap: 15px; }
+        .form-row .form-group { flex: 1; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4a90d9, #357abd);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(74,144,217,0.4); }
+        .mensagem { padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; text-align: center; }
+        .mensagem.sucesso { display: block; background: #d4edda; color: #155724; }
+        .mensagem.erro { display: block; background: #f8d7da; color: #721c24; }
+        .nav { text-align: center; margin-top: 20px; }
+        .nav a { color: #4a90d9; text-decoration: none; font-weight: 600; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-logout { padding: 8px 16px; background: #e74c3c; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+        .welcome { background: #e8f4fd; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4a90d9; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- CADASTRO -->
+        <div id="telaCadastro">
+            <h1>📋 Cadastro</h1>
+            <form id="formCadastro">
+                <div class="form-group">
+                    <label>Nome Completo *</label>
+                    <input type="text" id="nome" placeholder="João da Silva" required>
+                    <div class="erro" id="erroNome"></div>
+                </div>
+                <div class="form-group">
+                    <label>Idade *</label>
+                    <input type="number" id="idade" placeholder="25" min="1" required>
+                    <div class="erro" id="erroIdade"></div>
+                </div>
+                <div class="form-group">
+                    <label>CPF *</label>
+                    <input type="text" id="cpf" placeholder="123.456.789-00" maxlength="14" required>
+                    <div class="erro" id="erroCpf"></div>
+                </div>
+                <div class="form-group">
+                    <label>Telefone *</label>
+                    <input type="text" id="telefone" placeholder="(11) 99999-9999" maxlength="15" required>
+                    <div class="erro" id="erroTelefone"></div>
+                </div>
+                <fieldset>
+                    <legend>📍 Endereço</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Rua *</label>
+                            <input type="text" id="rua" placeholder="Rua das Flores" required>
+                        </div>
+                        <div class="form-group" style="max-width:100px">
+                            <label>Número *</label>
+                            <input type="text" id="numero" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cidade *</label>
+                            <input type="text" id="cidade" placeholder="São Paulo" required>
+                        </div>
+                        <div class="form-group" style="max-width:100px">
+                            <label>Estado *</label>
+                            <select id="estado" required>
+                                <option value="">UF</option>
+                                <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                                <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                                <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                                <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                                <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                                <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                                <option>SP</option><option>SE</option><option>TO</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <label>E-mail *</label>
+                    <input type="email" id="email" placeholder="joao@email.com" required>
+                    <div class="erro" id="erroEmail"></div>
+                </div>
+                <div class="form-group">
+                    <label>Senha * (mín. 8 caracteres, letras e números)</label>
+                    <input type="password" id="senha" placeholder="Sua senha" required>
+                    <div class="erro" id="erroSenha"></div>
+                </div>
+                <div class="mensagem" id="msgCadastro"></div>
+                <button type="submit" class="btn">Cadastrar</button>
+            </form>
+            <div class="nav">Já tem conta? <a href="#" onclick="mostrarTela('telaLogin')">Fazer login</a></div>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="telaLogin" class="hidden">
+            <h1>🔐 Login</h1>
+            <form id="formLogin">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="loginEmail" placeholder="Seu e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginSenha" placeholder="Sua senha" required>
+                </div>
+                <div class="mensagem" id="msgLogin"></div>
+                <button type="submit" class="btn">Entrar</button>
+            </form>
+            <div class="nav">Não tem conta? <a href="#" onclick="mostrarTela('telaCadastro')">Cadastre-se</a></div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="telaDashboard" class="hidden">
+            <div class="header">
+                <h1>📊 Dashboard</h1>
+                <button class="btn-logout" onclick="logout()">Sair</button>
+            </div>
+            <div class="welcome">
+                <h2>Bem-vindo, <span id="nomeUsuario"></span>!</h2>
+                <p>Área restrita - Controle de sessão ativo.</p>
+            </div>
+            <h3>👥 Usuários Cadastrados</h3>
+            <table>
+                <thead><tr><th>Nome</th><th>Email</th><th>Cidade</th></tr></thead>
+                <tbody id="listaUsuarios"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Regex para validações
+        const REGEX = {
+            nome: /^[A-Za-zÀ-ÿ\s]{3,}$/,
+            cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
+            telefone: /^\(\d{2}\)\s?\d{4,5}-\d{4}$/,
+            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            senha: /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/
+        };
+
+        // Máscara CPF
+        document.getElementById('cpf').addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+            else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+            else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+            this.value = v;
+        });
+
+        // Máscara Telefone
+        document.getElementById('telefone').addEventListener('input', function() {
+            let v = this.value.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 6) v = v.replace(/(\d{2})(\d{4,5})(\d{1,4})/, '($1) $2-$3');
+            else if (v.length > 2) v = v.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+            this.value = v;
+        });
+
+        // Validação de CPF (dígitos verificadores)
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+            
+            let soma = 0;
+            for (let i = 0; i < 9; i++) soma += parseInt(cpf[i]) * (10 - i);
+            let resto = (soma * 10) % 11;
+            if (resto === 10) resto = 0;
+            if (resto !== parseInt(cpf[9])) return false;
+            
+            soma = 0;
+            for (let i = 0; i < 10; i++) soma += parseInt(cpf[i]) * (11 - i);
+            resto = (soma * 10) % 11;
+            if (resto === 10) resto = 0;
+            return resto === parseInt(cpf[10]);
+        }
+
+        // Validação do formulário
+        function validarFormulario() {
+            let valido = true;
+            
+            const campos = [
+                { id: 'nome', regex: REGEX.nome, msg: 'Apenas letras e espaços' },
+                { id: 'cpf', regex: REGEX.cpf, msg: 'CPF inválido', extra: validarCPF },
+                { id: 'telefone', regex: REGEX.telefone, msg: 'Formato: (XX) XXXXX-XXXX' },
+                { id: 'email', regex: REGEX.email, msg: 'Email inválido' },
+                { id: 'senha', regex: REGEX.senha, msg: 'Mín. 8 chars, letras e números' }
+            ];
+
+            campos.forEach(c => {
+                const input = document.getElementById(c.id);
+                const erro = document.getElementById('erro' + c.id.charAt(0).toUpperCase() + c.id.slice(1));
+                const valor = input.value.trim();
+                let ok = c.regex.test(valor);
+                if (ok && c.extra) ok = c.extra(valor);
+                
+                if (ok) {
+                    input.classList.remove('invalido');
+                    input.classList.add('valido');
+                    if (erro) erro.textContent = '';
+                } else {
+                    input.classList.remove('valido');
+                    input.classList.add('invalido');
+                    if (erro) erro.textContent = c.msg;
+                    valido = false;
+                }
+            });
+
+            // Validação idade (maior de 18)
+            const idade = document.getElementById('idade');
+            const erroIdade = document.getElementById('erroIdade');
+            if (parseInt(idade.value) < 18) {
+                idade.classList.add('invalido');
+                erroIdade.textContent = 'Deve ser maior de 18';
+                valido = false;
+            } else {
+                idade.classList.remove('invalido');
+                idade.classList.add('valido');
+                erroIdade.textContent = '';
+            }
+
+            // Validação campos obrigatórios
+            ['rua', 'numero', 'cidade', 'estado'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) {
+                    el.classList.add('invalido');
+                    valido = false;
+                } else {
+                    el.classList.remove('invalido');
+                    el.classList.add('valido');
+                }
+            });
+
+            return valido;
+        }
+
+        // Navegação
+        function mostrarTela(id) {
+            document.querySelectorAll('.container > div').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        // Cadastro
+        document.getElementById('formCadastro').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const msg = document.getElementById('msgCadastro');
+            
+            if (!validarFormulario()) {
+                msg.className = 'mensagem erro';
+                msg.textContent = 'Corrija os erros acima';
+                return;
+            }
+
+            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const cpf = document.getElementById('cpf').value;
+
+            if (usuarios.find(u => u.email === email)) {
+                msg.className = 'mensagem erro';
+                msg.textContent = 'Email já cadastrado';
+                return;
+            }
+            
+            if (usuarios.find(u => u.cpf === cpf)) {
+                msg.className = 'mensagem erro';
+                msg.textContent = 'CPF já cadastrado';
+                return;
+            }
+
+            usuarios.push({
+                nome: document.getElementById('nome').value.trim(),
+                idade: document.getElementById('idade').value,
+                cpf: cpf,
+                telefone: document.getElementById('telefone').value,
+                rua: document.getElementById('rua').value.trim(),
+                numero: document.getElementById('numero').value.trim(),
+                cidade: document.getElementById('cidade').value.trim(),
+                estado: document.getElementById('estado').value,
+                email: email,
+                senha: document.getElementById('senha').value
+            });
+            
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            msg.className = 'mensagem sucesso';
+            msg.textContent = 'Cadastrado com sucesso!';
+            this.reset();
+            document.querySelectorAll('input, select').forEach(el => el.classList.remove('valido', 'invalido'));
+        });
+
+        // Login
+        document.getElementById('formLogin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const msg = document.getElementById('msgLogin');
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const senha = document.getElementById('loginSenha').value;
+
+            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+            if (usuario) {
+                sessionStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+                carregarDashboard();
+                mostrarTela('telaDashboard');
+            } else {
+                msg.className = 'mensagem erro';
+                msg.textContent = 'Email ou senha incorretos';
+            }
+        });
+
+        // Dashboard
+        function carregarDashboard() {
+            const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+            document.getElementById('nomeUsuario').textContent = usuario.nome;
+            
+            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            const tbody = document.getElementById('listaUsuarios');
+            tbody.innerHTML = '';
+            usuarios.forEach(u => {
+                tbody.innerHTML += `<tr><td>${u.nome}</td><td>${u.email}</td><td>${u.cidade}</td></tr>`;
+            });
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem('usuarioLogado');
+            mostrarTela('telaLogin');
+        }
+
+        // Verifica sessão ao carregar
+        if (sessionStorage.getItem('usuarioLogado')) {
+            carregarDashboard();
+            mostrarTela('telaDashboard');
+        }
+    </script>
+</body>
+</html>
