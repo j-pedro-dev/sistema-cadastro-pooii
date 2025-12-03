@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS sistema_cadastro;
 USE sistema_cadastro;
 
